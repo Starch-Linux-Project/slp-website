@@ -8,7 +8,7 @@ The build log supplied on October 9, 2026 confirms **Cloudflare Workers Builds w
 
 The timed-out deployment ran `npx wrangler deploy` without a repository Wrangler configuration. Wrangler's automatic setup selected `npm run dev` and `_site`. The development command starts a server and watches forever; the actual output directory is `dist`. Eleventy generated the wiki successfully, but deployment never reached the upload step.
 
-`wrangler.jsonc` now declares the worker name and the correct static asset directory, so Wrangler does not need to infer them. Wrangler is pinned in the package manifest and lockfile to the version in the supplied log.
+`wrangler.jsonc` declares the worker name, the static asset directory, and a custom build command (`npm run build`). Running `npx wrangler deploy` now builds the site before reading `dist`, including on a fresh checkout. Wrangler is pinned in the package manifest and lockfile to the version in the supplied log.
 
 ## Required dashboard settings
 
@@ -16,7 +16,7 @@ After committing and pushing this fix, open **Workers & Pages â†’ slp-website â†
 
 | Setting | Value |
 | --- | --- |
-| Build command | `npm run build` |
+| Build command | Leave blank; Wrangler runs `npm run build` through its configuration |
 | Deploy command | `npx wrangler deploy` |
 | Root directory | Repository root; leave the optional field blank |
 | Production branch | `main`, unless the existing Git connection uses another branch |
@@ -24,12 +24,12 @@ After committing and pushing this fix, open **Workers & Pages â†’ slp-website â†
 | Node.js | `22.23.3`, pinned in `.node-version` and confirmed in the supplied log |
 | Additional environment variables | None required |
 
-1. Set the **Build command** to `npm run build`. Do not use `npm run dev` or `eleventy --serve` in deployment settings.
+1. Leave the optional dashboard **Build command** blank. Wrangler runs the production build automatically. If it is already `npm run build`, deployment still works but builds twice. Remove any `npm run dev` or `eleventy --serve` command from deployment settings.
 2. Keep the **Deploy command** as `npx wrangler deploy`.
 3. Confirm the root directory and production branch above. The exact branch must match the branch edited in Pages CMS.
 4. Start a build of the commit containing `wrangler.jsonc`. Retrying an older commit without that file will not test this fix.
 
-Cloudflare installs the locked npm dependencies, runs the finite production build, and then uploads `dist`. The successful build log should report `Validated ... HTML pages` and proceed to Wrangler deployment; it should not say `Watching` or start a localhost server.
+Cloudflare installs the locked npm dependencies and invokes Wrangler. Wrangler runs the finite production build and then uploads `dist`. The successful build log should report `Validated ... HTML pages` and proceed to Wrangler deployment; it should not say `Watching` or start a localhost server.
 
 If build watch paths have been restricted, include content, media, templates, code, styles, configuration, package files, and public assets. The default all-files behavior requires no change. Automatic builds must remain enabled for CMS commits to publish.
 
@@ -77,7 +77,7 @@ npm test
 npx wrangler deploy --dry-run
 ```
 
-The dry run validates deployment configuration without uploading or publishing. The normal build must finish before Wrangler is invoked.
+The dry run also runs the configured production build, then validates deployment configuration without uploading or publishing. A separate manual build is not required before invoking Wrangler.
 
 After deployment:
 
