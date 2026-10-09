@@ -1,83 +1,96 @@
 # Cloudflare wiki setup
 
-The wiki is served by the existing website at **https://starchlinuxproject.org/wiki/**. `/wiki` redirects to `/wiki/`. Articles use URLs such as `/wiki/installation/`.
+The website and wiki deploy together at **https://starchlinuxproject.org/wiki/**. No separate wiki host is needed.
 
 ## Existing deployment
 
-- **Product:** Cloudflare Pages with GitHub integration (confirmed by the owner).
-- **Repository:** `Starch-Linux-Project/slp-website`.
-- **Project name:** not present in the repository; select the existing project serving `starchlinuxproject.org`. Do not create a second project.
-- **Branch:** local `main` tracks `origin/main`. The older private handoff specifies production branch `main`; confirm this in the existing dashboard.
-- **Previously documented settings:** framework None, build command `exit 0`, output `.`, root blank. These older settings were not independently verified against the dashboard.
-- **New build:** Eleventy generates wiki pages and copies the existing public website to `dist/`.
+The build log supplied on October 9, 2026 confirms **Cloudflare Workers Builds with Static Assets**, worker **`slp-website`**, connected to GitHub repository **`Starch-Linux-Project/slp-website`**. The earlier assumption that this deployment was Cloudflare Pages was incorrect.
 
-## Manual dashboard actions
+The timed-out deployment ran `npx wrangler deploy` without a repository Wrangler configuration. Wrangler's automatic setup selected `npm run dev` and `_site`. The development command starts a server and watches forever; the actual output directory is `dist`. Eleventy generated the wiki successfully, but deployment never reached the upload step.
 
-After these website changes are committed and pushed to GitHub:
+`wrangler.jsonc` now declares the worker name and the correct static asset directory, so Wrangler does not need to infer them. Wrangler is pinned in the package manifest and lockfile to the version in the supplied log.
 
-1. Open **Workers & Pages**, select the existing Pages project for `starchlinuxproject.org`, and open its build settings.
-2. Set **Build command** to `npm run build`.
-3. Set **Build output directory** to `dist`.
-4. Keep **Root directory** blank (repository root) and **Framework preset** as None. The explicit command runs Eleventy.
-5. Confirm **Production branch** is `main` and automatic production deployments are enabled. If the existing project uses a different production branch, use that same branch in Pages CMS and publish the implementation there.
-6. If build watch paths are restricted, include `content/**`, `public/wiki/images/**`, `src/**`, `lib/**`, `scripts/**`, `css/**`, `js/**`, `.pages.yml`, `eleventy.config.js`, `package.json`, `package-lock.json`, `.node-version`, `_headers`, `_redirects`, and existing public HTML/assets. Leaving the project's default all-files behavior is simplest.
-7. Trigger a deployment of the new commit if saving the settings did not trigger one. Verify the deployment log reports the generated pages and successful validation.
+## Required dashboard settings
 
-Apply the same build command/output settings to preview deployments when separate settings are configured. Preview the change before publishing production when possible.
-
-## Final Pages settings
+After committing and pushing this fix, open **Workers & Pages → slp-website → Settings → Build** and set:
 
 | Setting | Value |
 | --- | --- |
-| Project | Existing project serving `starchlinuxproject.org`; name must be read from dashboard |
-| Repository | `Starch-Linux-Project/slp-website` |
-| Production branch | `main`, unless the dashboard confirms another existing branch |
-| Framework preset | None |
 | Build command | `npm run build` |
-| Build output directory | `dist` |
-| Root directory | Blank |
-| Node.js | `22.23.3`, pinned in `.node-version` |
-| Environment variables | None required by this implementation |
+| Deploy command | `npx wrangler deploy` |
+| Root directory | Repository root; leave the optional field blank |
+| Production branch | `main`, unless the existing Git connection uses another branch |
+| Asset/output directory | `dist`, configured in `wrangler.jsonc` |
+| Node.js | `22.23.3`, pinned in `.node-version` and confirmed in the supplied log |
+| Additional environment variables | None required |
 
-Pages installs npm dependencies from the package manifest/lockfile before building. Keep dependency installation enabled. If an existing `NODE_VERSION` override is configured, remove that override or align it with `.node-version`.
+1. Set the **Build command** to `npm run build`. Do not use `npm run dev` or `eleventy --serve` in deployment settings.
+2. Keep the **Deploy command** as `npx wrangler deploy`.
+3. Confirm the root directory and production branch above. The exact branch must match the branch edited in Pages CMS.
+4. Start a build of the commit containing `wrangler.jsonc`. Retrying an older commit without that file will not test this fix.
+
+Cloudflare installs the locked npm dependencies, runs the finite production build, and then uploads `dist`. The successful build log should report `Validated ... HTML pages` and proceed to Wrangler deployment; it should not say `Watching` or start a localhost server.
+
+If build watch paths have been restricted, include content, media, templates, code, styles, configuration, package files, and public assets. The default all-files behavior requires no change. Automatic builds must remain enabled for CMS commits to publish.
+
+## Static asset configuration
+
+- Worker: `slp-website`.
+- Assets: `./dist`.
+- HTML handling: `auto-trailing-slash`, matching generated `directory/index.html` pages.
+- Missing files: `404-page`, using the existing `404.html`.
+- Redirects and security headers: `_redirects` and `_headers` are copied into `dist`.
+- Worker JavaScript entry point, database bindings, and runtime variables: none required.
+- Custom domain/routes: retain the existing dashboard configuration for `starchlinuxproject.org`. Its exact route configuration was not present in the log or repository; the new Wrangler file does not declare replacement routes.
 
 ## Domain and DNS
 
-**No additional DNS record is required because `/wiki/` is served by the existing `starchlinuxproject.org` deployment.** Keep the current custom domain and its DNS records. No wiki subdomain, new custom domain, or Worker route is needed.
+**No additional DNS record is required because `/wiki/` is served by the existing `starchlinuxproject.org` deployment.** Keep the current custom domain and DNS records. No wiki subdomain or additional route is needed.
 
-## Workers settings
+## Cloudflare Pages settings
 
-Not applicable. This implementation does not create a Worker, Pages Function, binding, or runtime database.
+Not applicable to the deployment shown in the log. Pages CMS is the editing service; it does not require Cloudflare Pages hosting.
 
 ## Pages CMS
 
-Use the hosted service at https://app.pagescms.org. Authorize its GitHub App for `Starch-Linux-Project/slp-website` and select the production branch.
+Use https://app.pagescms.org with access to the website repository and its production branch. The wiki starts with a homepage and no preset articles or categories. Add a category, then an article; public navigation is generated from that content.
 
-The local `.pages.yml` describes `content/wiki/` articles, `content/wiki-categories/` categories, `content/wiki-home.md`, and uploads in `public/wiki/images/`. The public image URL prefix is `/wiki/images/`.
+- Articles: `content/wiki/`.
+- Categories: `content/wiki-categories/`.
+- Homepage: `content/wiki-home.md`.
+- Image uploads: `public/wiki/images/`, published under `/wiki/images/`.
 
-The owner created `.pages.yml` through Pages CMS during implementation. The `main` branch copy read from GitHub was empty at that time. Reconcile that remote commit before pushing local changes; preserve any newer owner configuration and make sure its content paths/fields match this build. Do not blindly overwrite a configuration that has since been filled in.
-
-See [WIKI-EDITING.md](WIKI-EDITING.md) for the editing workflow and field contract.
+See [WIKI-EDITING.md](WIKI-EDITING.md) for the field contract and editing instructions. Keep any CMS-managed configuration aligned with these paths. No CMS configuration changes are needed to fix the deployment timeout.
 
 ## Secrets
 
-No GitHub token, Cloudflare API token, OAuth secret, or other secret is required in the website repository or Cloudflare build environment. The owner authorizes Pages CMS through GitHub. The existing Cloudflare GitHub connection performs deployment.
+No secrets belong in this repository. Workers Builds uses its managed Cloudflare deployment credentials; the existing authentication setup did not cause the supplied timeout. Pages CMS uses the owner's GitHub App authorization. No additional secret is required for this fix.
 
-## Verification still requiring the hosted accounts
+## Validation
 
-1. Confirm the project name, production branch, build settings, and watch paths above.
-2. Check whether GitHub branch rules allow Pages CMS to save directly to the production branch. If pull requests are required, the owner must merge changes before publication; saving alone will not publish them. Do not silently weaken branch protection.
-3. In Pages CMS, create a test article, select a category, upload and insert a screenshot with an image description, and save.
-4. Confirm Cloudflare automatically starts a build for that commit and the article/image appear on the custom domain.
-5. Edit the title, category, order, and formatted content. Confirm the URL stays stable and the changes appear after deployment. Check that tables and fenced code survive the rich-text editor's save/reopen cycle.
-6. Delete the test article, remove any links to it, and confirm the next deployment removes it from navigation and returns a 404 for its old URL.
-7. Verify `/wiki`, `/wiki/`, article URLs, headers, and 404 behavior on the deployed site. A local Python server does not process Cloudflare `_redirects` or `_headers`.
+Local checks:
 
-Local checks cannot substitute for these authenticated CMS/deployment checks. A failed build leaves the last successful deployment in place; inspect its log and fix the named content field or link before saving again.
+```sh
+npm ci
+npm run build
+npm test
+npx wrangler deploy --dry-run
+```
+
+The dry run validates deployment configuration without uploading or publishing. The normal build must finish before Wrangler is invoked.
+
+After deployment:
+
+1. Verify `/`, `/download/`, `/community/`, `/extras/`, `/projects/`, `/wiki`, `/wiki/`, and a nonexistent URL.
+2. Add an article and image through Pages CMS. Confirm the GitHub commit automatically triggers a Workers build and the page/image appear on the existing domain.
+3. Edit the article's title, section, and order; check that its URL stays stable and navigation updates. Check rich-text formatting after saving and reopening.
+4. Delete the test article and remove any links to it. Confirm its old URL returns 404 after the next deployment.
+
+These authenticated CMS/deployment checks require the owner's accounts. If branch protection requires a pull request, its merge is also required before changes reach production.
 
 ## References
 
-- [Cloudflare build configuration](https://developers.cloudflare.com/pages/configuration/build-configuration/)
-- [Cloudflare Git integration](https://developers.cloudflare.com/pages/configuration/git-integration/)
-- [Cloudflare route and 404 behavior](https://developers.cloudflare.com/pages/configuration/serving-pages/)
-- [Pages CMS configuration](https://pagescms.org/docs/configuration/)
+- [Workers Builds configuration](https://developers.cloudflare.com/workers/ci-cd/builds/configuration/)
+- [Wrangler configuration](https://developers.cloudflare.com/workers/wrangler/configuration/)
+- [Static asset HTML handling](https://developers.cloudflare.com/workers/static-assets/routing/advanced/html-handling/)
+- [Static site 404 handling](https://developers.cloudflare.com/workers/static-assets/routing/static-site-generation/)
