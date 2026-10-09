@@ -1,0 +1,23 @@
+---
+layout: wiki.njk
+permalink: /wiki/index.html
+---
+<header class="wiki-intro">
+  <p class="eyebrow"><span class="dot" aria-hidden="true"></span> Documentation</p>
+  <h1>{{ wiki.home.title | escape }}</h1>
+  <p class="lead">{{ wiki.home.description | escape }}</p>
+</header>
+<div class="wiki-prose">{{ wiki.home.html | safe }}</div>
+<div class="wiki-categories">
+{% for category in wiki.categories %}
+{% if category.articles.length %}
+  <section class="wiki-category" id="category-{{ category.id }}" aria-labelledby="category-title-{{ category.id }}">
+    <h2 id="category-title-{{ category.id }}">{{ category.title | escape }}</h2>
+    <p>{{ category.description | escape }}</p>
+    <ul>{% for entry in category.articles %}
+      <li><a href="{{ entry.url }}">{{ entry.title | escape }} <span aria-hidden="true">→</span></a><p>{{ entry.description | escape }}</p></li>
+    {% endfor %}</ul>
+  </section>
+{% endif %}
+{% endfor %}
+</div>

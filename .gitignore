@@ -1,1 +1,3 @@
 /dev-private-web/
+/node_modules/
+/dist/

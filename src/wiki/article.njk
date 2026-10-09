@@ -1,0 +1,23 @@
+---
+layout: wiki.njk
+pagination:
+  data: wiki.articles
+  size: 1
+  alias: article
+permalink: /wiki/{{ article.slug }}/index.html
+---
+<article>
+  <header class="wiki-intro">
+    <p class="eyebrow"><span class="dot" aria-hidden="true"></span> {{ article.categoryTitle | escape }}</p>
+    <h1>{{ article.title | escape }}</h1>
+    <p class="lead">{{ article.description | escape }}</p>
+  </header>
+  {% if article.image %}<figure class="wiki-cover"><img src="{{ article.image | escape }}" alt="{{ article.image_alt | escape }}" decoding="async"></figure>{% endif %}
+  <div class="wiki-prose">{{ article.html | safe }}</div>
+</article>
+{% if article.previous or article.next %}
+<nav class="wiki-pagination" aria-label="Articles in this category">
+  {% if article.previous %}<a href="{{ article.previous.url }}"><small>← Previous</small>{{ article.previous.title | escape }}</a>{% else %}<span></span>{% endif %}
+  {% if article.next %}<a href="{{ article.next.url }}"><small>Next →</small>{{ article.next.title | escape }}</a>{% endif %}
+</nav>
+{% endif %}

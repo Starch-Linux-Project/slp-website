@@ -1,0 +1,134 @@
+media:
+  - name: wiki_images
+    label: Wiki images
+    input: public/wiki/images
+    output: /wiki/images
+    extensions: [png, jpg, jpeg, webp, gif]
+    rename: safe
+
+content:
+  - name: wiki
+    label: Starch Linux Wiki
+    type: collection
+    path: content/wiki
+    format: yaml-frontmatter
+    subfolders: false
+    filename:
+      template: "{primary}.md"
+      field: create
+    operations:
+      create: true
+      rename: false
+      delete: true
+    view:
+      primary: title
+      fields: [title, category, order]
+      sort: [title, order]
+      search: [title, description]
+      default:
+        sort: order
+        order: asc
+    fields:
+      - name: title
+        label: Page title
+        type: string
+        required: true
+      - name: description
+        label: Short description
+        type: text
+        required: true
+      - name: category
+        label: Category
+        type: reference
+        required: true
+        options:
+          collection: wiki_categories
+          multiple: false
+          value: "{path}"
+          label: "{title}"
+          search: title
+      - name: order
+        label: Navigation order
+        description: Lower numbers appear first within the category. Use 10, 20, 30 to leave room for new articles.
+        type: number
+        required: true
+        default: 10
+        options:
+          min: 0
+      - name: body
+        label: Article
+        type: rich-text
+        required: true
+        options:
+          format: markdown
+          media: wiki_images
+      - name: image
+        label: Optional cover image
+        type: image
+        options:
+          media: wiki_images
+      - name: image_alt
+        label: Cover image description
+        description: Required when a cover image is selected. Describe what the image shows.
+        type: string
+
+  - name: wiki_home
+    label: Wiki home
+    type: file
+    path: content/wiki-home.md
+    format: yaml-frontmatter
+    operations:
+      create: false
+      rename: false
+      delete: false
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: description
+        label: Short description
+        type: text
+        required: true
+      - name: body
+        label: Introduction
+        type: rich-text
+        required: true
+        options:
+          format: markdown
+          media: wiki_images
+
+  - name: wiki_categories
+    label: Wiki categories
+    type: collection
+    path: content/wiki-categories
+    format: yaml
+    subfolders: false
+    filename:
+      template: "{primary}.yml"
+      field: create
+    operations:
+      rename: false
+    view:
+      primary: title
+      fields: [title, order]
+      sort: [title, order]
+      default:
+        sort: order
+        order: asc
+    fields:
+      - name: title
+        label: Category name
+        type: string
+        required: true
+      - name: description
+        label: Description
+        type: text
+        required: true
+      - name: order
+        label: Category order
+        type: number
+        required: true
+        default: 10
+        options:
+          min: 0

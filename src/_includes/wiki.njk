@@ -1,0 +1,30 @@
+---
+layout: site.njk
+---
+{% macro navigation(wiki, current) %}
+<nav aria-label="Wiki navigation">
+  <a class="wiki-home-link" href="/wiki/"{% if current == '/wiki/' %} aria-current="page"{% endif %}>Wiki home</a>
+  {% for category in wiki.categories %}
+  {% if category.articles.length %}
+  <div class="wiki-nav-group">
+    <a class="wiki-category-link" href="/wiki/#category-{{ category.id }}">{{ category.title | escape }}</a>
+    <ul>{% for entry in category.articles %}
+      <li><a href="{{ entry.url }}"{% if current == entry.url %} aria-current="page"{% endif %}>{{ entry.title | escape }}</a></li>
+    {% endfor %}</ul>
+  </div>
+  {% endif %}
+  {% endfor %}
+</nav>
+{% endmacro %}
+<div class="wiki-layout">
+  <aside class="wiki-sidebar">{{ navigation(wiki, page.url) }}</aside>
+  <div class="wiki-main">
+    <details class="wiki-mobile-nav"><summary>Browse the wiki</summary>{{ navigation(wiki, page.url) }}</details>
+    <nav class="wiki-breadcrumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a><span aria-hidden="true">/</span>
+      {% if article %}<a href="/wiki/">Wiki</a><span aria-hidden="true">/</span><a href="/wiki/#category-{{ article.categoryId }}">{{ article.categoryTitle | escape }}</a>
+      {% else %}<span aria-current="page">Wiki</span>{% endif %}
+    </nav>
+    {{ content | safe }}
+  </div>
+</div>

@@ -1,0 +1,17 @@
+{
+  "name": "starch-linux-website",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "eleventy --serve",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.2",
+    "markdown-it": "^14.1.0",
+    "yaml": "^2.8.1",
+    "linkedom": "^0.18.12"
+  }
+}

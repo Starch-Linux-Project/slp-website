@@ -1,0 +1,2 @@
+# Match only the wiki homepage; image URLs and article directories keep their normal behavior.
+/wiki /wiki/ 301
