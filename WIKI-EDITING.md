@@ -56,7 +56,7 @@ npm test
 npm run dev
 ```
 
-The development command serves the complete site with the generated wiki. Alternatively, after building, run `python3 -m http.server 8000 --bind 127.0.0.1 --directory dist`. Serving the repository root alone does not generate wiki pages.
+The development command serves the complete site with the generated wiki at http://localhost:8000/. Stop any existing server on port 8000 before starting it. Alternatively, after building, run `python3 -m http.server 8000 --bind 127.0.0.1 --directory dist` and open http://127.0.0.1:8000/. Serving the repository root alone does not generate wiki pages.
 
 `npm run build` clears only the generated `dist/` directory, runs Eleventy, and checks public routes, internal links, image descriptions, configuration paths, and excluded source files. Commit source files and the lockfile; do not commit `dist/` or `node_modules/`.
 

@@ -7,7 +7,7 @@
   },
   "scripts": {
     "build": "node scripts/build.mjs",
-    "dev": "eleventy --serve",
+    "dev": "eleventy --serve --port=8000",
     "test": "node --test tests/*.test.mjs"
   },
   "devDependencies": {
