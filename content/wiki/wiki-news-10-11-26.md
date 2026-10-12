@@ -1,6 +1,8 @@
 ---
 title: We have a Wiki!
-description: First news post in the wiki!
+description: |-
+  First news post in the wiki! 
+  (10/11/26)
 category: content/wiki-categories/news.yml
 order: 10
 ---
