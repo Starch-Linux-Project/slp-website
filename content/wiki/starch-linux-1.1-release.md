@@ -6,7 +6,7 @@ order: 10
 ---
 Starch Linux 1.1 is released!
 
-The new release of Starch Linux comes with many fixes and features!
+The new release of Starch Linux comes with many fixes and features;
 
 Feature(s):
 
