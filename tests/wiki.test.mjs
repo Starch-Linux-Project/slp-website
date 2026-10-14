@@ -62,6 +62,21 @@ test('category title changes preserve references; category removal reports a use
   assert.throws(() => loadWiki(root), /select an existing category/);
 });
 
+test('CMS release filenames preserve version numbers in article URLs', t => {
+  const root = fixture(t);
+  const path = join(root, 'content/wiki/version-2.3-release.md');
+  cpSync(join(root, 'content/wiki/installation.md'), path);
+  const article = loadWiki(root).articles.find(a => a.slug === 'version-2.3-release');
+  assert.equal(article.url, '/wiki/version-2.3-release/');
+  rmSync(path);
+  for (const slug of ['version..2', '.version', 'version.', 'version--2']) {
+    const invalidPath = join(root, `content/wiki/${slug}.md`);
+    cpSync(join(root, 'content/wiki/installation.md'), invalidPath);
+    assert.throws(() => loadWiki(root), /Invalid or reserved article filename/);
+    rmSync(invalidPath);
+  }
+});
+
 test('rejects reserved paths and invalid navigation order', t => {
   const root = fixture(t);
   const original = join(root, 'content/wiki/installation.md');
