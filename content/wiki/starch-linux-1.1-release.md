@@ -1,6 +1,6 @@
 ---
 title: Starch Linux 1.1 Release!
-description: Release notes and information for Starch Linux 1.1
+description: Release notes and information for Starch Linux 1.1 (10/14/26)
 category: content/wiki-categories/releases.yml
 order: 10
 ---
