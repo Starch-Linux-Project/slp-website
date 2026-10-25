@@ -1,6 +1,7 @@
 ---
 title: Linux Update Utility Installation and Usage Guide
-description: Instructions for installing and using Linux Update Utility(10/24/26)
+description: Instructions for installing and using Linux Update
+  Utility(10/24/26) *Edited(10/25/26)
 category: content/wiki-categories/installation-guides.yml
 order: 10
 ---
@@ -115,3 +116,7 @@ Once met with the Update Complete message, it means your system is now up to dat
 ![Screenshot_20261024_145333.png](/wiki/images/screenshot20261024145333.png)
 
 You are now equipped with a tool to easily keep your system up-to-date! Thank you for using my app, and always feel free to join the Discord and support me. 
+
+Enjoy,
+
+SethDoesTech
