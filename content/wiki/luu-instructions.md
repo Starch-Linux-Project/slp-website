@@ -14,10 +14,13 @@ Prerequisites and good-to-knows: 
 1. A Linux system with somewhat recent packages (Ultra-reliable server-desktop systems may have considerably aged packages)
 2. You WILL use the terminal (No, it’s not scary)
 3. Linux Update Utility was created and is maintained by 1 person, me :)
+4. This app contains no processes which can directly harm your Linux system. This being said, this app simply automates your existing update process. If the maintainers of your repositories ship an update which negatively affects your system, this app does not protect you nor does it pose any additional risk. Do not fear updates or this app by any means, but I feel obligated to make this known. 
 
 ![Screenshot_20261024_143933.png](/wiki/images/screenshot20261024143933-1.png)
 
 Once you’ve got these requirements out of the way, installation will fly by. Explanation for commands and practices will be provided when needed. If you need help, the Discord is always available. Tundra and I are quite active and can help you get going very quickly. This example is running Fedora KDE, but steps are the same across all systems. 
+
+- Getting the installer:
 
 Navigate to the download page and download the LUU Setup Utility;
 
@@ -27,17 +30,17 @@ Navigate to the download page and download the LUU Setup Utility;
 
 Instructions from here may have to be interpreted slightly for new releases, however only the file name will change. 
 
+- Terminal work, if you're inexperienced you should take this slow:
+
 Now open your terminal, your web browser will no longer be need;
 
 Use the cd command to enter your downloads directory;
-
-cd Downloads
 
 ![Screenshot_20261024_144245.png](/wiki/images/screenshot20261024144245.png)
 
 Do a quick ls to get the exact name of the file;
 
-Make sure to either leave this on screen or remember it.
+Make sure to either leave this on screen or remember it. You will need it for the next few steps. 
 
 ![Screenshot_20261024_144334.png](/wiki/images/screenshot20261024144334.png)
 
@@ -53,7 +56,9 @@ Then repeat the ls, notice that it appears differently compared to before. 
 
 To run it, simply type ./ followed by the exact file name;
 
-As long as the app loads, errors in the terminal can be ignored. 
+The terminal may give warnings or errors, if the app opens and installs properly then these messages can be ignored. If a problem occurs, the terminal output may be helpful for troubleshooting.
+
+ I will remind you that the Discord is always available, and it's not unlikely that you'd receive assistance from me directly :)
 
 ![Screenshot_20261024_144552.png](/wiki/images/screenshot20261024144552.png)
 
@@ -63,13 +68,15 @@ This installs the app like any other app on your computer, simply search for it 
 
 ![Screenshot_20261024_144626.png](/wiki/images/screenshot20261024144626.png)
 
+- If everything up until this point has been successful, you are no longer going to need the terminal:
+
 You have successfully installed Linux Update Utility! 
 
 The rest of this guide will consist of a tour and usage instructions;
 
 ![Screenshot_20261024_144712.png](/wiki/images/screenshot20261024144712-1.png)
 
-Absorb the layout for a little bit, don’t be afraid to push buttons. This app has no processes which can break your Linux system. 
+Absorb the layout for a little bit, don’t be afraid to push buttons. This app contains no processes which can break your Linux system directly.
 
 The settings menu contains a themes menu and an option to uninstall the app;
 
@@ -81,15 +88,11 @@ To resume usage after an uninstall, reinstall the app. 
 
 The System Info tab contains some information about the app and your computer;
 
-At the top is your Linux distribution
-
-Next is your CPU architecture
-
-Next is your kernel
-
-Next is your package managers
-
-Next is the status of the update script
+- At the top is your Linux distribution
+- Next is your CPU architecture
+- Next is your kernel
+- Next is your package managers
+- Next is the status of the update script
 
 ![Screenshot_20261024_144842.png](/wiki/images/screenshot20261024144842-1.png)
 
@@ -111,11 +114,11 @@ Your system is now being updated! During updates you’ll see a loading wheel an
 
 ![Screenshot_20261024_145145.png](/wiki/images/screenshot20261024145145.png)
 
-Once met with the Update Complete message, it means your system is now up to date. To keep it up to date, periodically open the app and click Update System. 
+Once met with the Update Complete message, it means your system is now up to date. To keep your system up to date, periodically open the app and click Update System. 
 
 ![Screenshot_20261024_145333.png](/wiki/images/screenshot20261024145333.png)
 
-You are now equipped with a tool to easily keep your system up-to-date! Thank you for using my app, and always feel free to join the Discord and support me. 
+You are now equipped with a tool to easily keep your system up-to-date! Thank you for using my app, and always feel free to join the Discord and/or support me. 
 
 Enjoy,
 
