@@ -1,4 +1,7 @@
 export default function (config) {
+  config.addFilter('publicationDate', value => new Intl.DateTimeFormat('en-US', {
+    month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC',
+  }).format(new Date(`${value}T00:00:00Z`)));
   // Only explicitly public assets are copied. Content and development files stay private.
   for (const path of [
     'index.html', '404.html', 'download', 'community', 'extras', 'projects', 'css', 'js',

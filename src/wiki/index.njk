@@ -13,7 +13,7 @@ permalink: /wiki/index.html
     <h2 id="category-title-{{ category.id }}">{{ category.title | escape }}</h2>
     <p>{{ category.description | escape }}</p>
     <ul>{% for entry in category.articles %}
-      <li><a href="{{ entry.url }}">{{ entry.title | escape }} <span aria-hidden="true">→</span></a><p>{{ entry.description | escape }}</p></li>
+      <li><a href="{{ entry.url }}">{{ entry.title | escape }} <span aria-hidden="true">→</span></a><p>{{ entry.description | escape }}</p><p class="wiki-date">Published <time datetime="{{ entry.date | escape }}">{{ entry.date | publicationDate }}</time></p></li>
     {% endfor %}</ul>
   </section>
 {% endif %}

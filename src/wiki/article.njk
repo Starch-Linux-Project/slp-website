@@ -11,6 +11,7 @@ permalink: /wiki/{{ article.slug }}/index.html
     <p class="eyebrow"><span class="dot" aria-hidden="true"></span> {{ article.categoryTitle | escape }}</p>
     <h1>{{ article.title | escape }}</h1>
     <p class="lead">{{ article.description | escape }}</p>
+    <p class="wiki-date">Published <time datetime="{{ article.date | escape }}">{{ article.date | publicationDate }}</time></p>
   </header>
   {% if article.image %}<figure class="wiki-cover"><img src="{{ article.image | escape }}" alt="{{ article.image_alt | escape }}" decoding="async"></figure>{% endif %}
   <div class="wiki-prose">{{ article.html | safe }}</div>
