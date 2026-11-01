@@ -1,7 +1,6 @@
 ---
 title: Linux Update Utility Installation and Usage Guide
-description: Instructions for installing and using Linux Update
-  Utility(10/24/26) *Edited(10/25/26)
+description: Instructions for installing and using Linux Update Utility *Edited(10/25/26)
 category: content/wiki-categories/installation-guides.yml
 date: 2026-10-24
 ---
@@ -14,7 +13,7 @@ Prerequisites and good-to-knows: 
 1. A Linux system with somewhat recent packages (Ultra-reliable server-desktop systems may have considerably aged packages)
 2. You WILL use the terminal (No, it’s not scary)
 3. Linux Update Utility was created and is maintained by 1 person, me :)
-4. This app contains no processes which can directly harm your Linux system. This being said, this app simply automates your existing update process. If the maintainers of your repositories ship an update which negatively affects your system, this app does not protect you nor does it pose any additional risk. Do not fear updates or this app by any means, but I feel obligated to make this known. 
+4. This app contains no processes which can directly harm your Linux system. This being said, this app simply automates your existing update process. If the maintainers of your repositories ship an update which negatively affects your system, this app does not protect you nor does it pose any additional risk. Do not fear updates or this app by any means, but I feel obligated to make this known.
 
 ![Screenshot_20261024_143933.png](/wiki/images/screenshot20261024143933-1.png)
 
