@@ -1,6 +1,6 @@
 ---
 title: Linux Update Utility 1.2 Release
-description: Release notes for Linux Update Utility 1.2 Release(10/22/26)
+description: Release notes for Linux Update Utility 1.2 Release
 category: content/wiki-categories/releases.yml
 date: 2026-10-22
 ---
