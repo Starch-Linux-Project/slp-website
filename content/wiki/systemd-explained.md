@@ -3,7 +3,7 @@ title: "systemd: Everyone's Ugly Duckling That Never Goes Away"
 description: Learn about systemd, why it's fantastic, why it sucks, its
   alternatives, and what it means to you. (10/25/26)
 category: content/wiki-categories/linux-explained.yml
-order: 10
+date: 2026-10-25
 ---
 Hello;
 
