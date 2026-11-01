@@ -1,13 +1,12 @@
 ---
 title: "systemd: Everyone's Ugly Duckling That Never Goes Away"
 description: Learn about systemd, why it's fantastic, why it sucks, its
-  alternatives, and what it means to you. (10/25/26)
+  alternatives, and what it means to you.
 category: content/wiki-categories/linux-explained.yml
 date: 2026-10-25
 ---
 Hello;
 
-  
 
 
 Quick notice, there's some technical stuff in here. I’ll try to provide explanations for newbies, but technical subjects require technical knowledge no matter the day of the week. Also, there is sarcasm. 
@@ -22,14 +21,12 @@ What gives?
 
 Realistically speaking, and don’t be offended by this if you're a TikTok goober, you’re using systemd as we speak. It’s hands down the most widely supported and most commonly understood init system. (Init systems are generally responsible for starting your system and managing its services and resources). While there are inits that the community loves such as runit, Dinit and OpenRC, these alternatives must be sought out. If you're not specifically looking for a systemd alternative, you're likely running systemd. It’s assumed by many developers that it will be present on your system, which makes it a dependency in many cases. (A dependency is software which is required for another piece of software to operate).
 
-  
 
 
 Check your init system:
 
 ps -p 1 -o comm=
 
-  
 
 
 This checks the process currently running as PID 1, which is basically the throne of the process hierarchy. The output should name your init. 
@@ -38,7 +35,6 @@ This checks the process currently running as PID 1, which is basically the thron
 
 Systemd does many things correctly. It uses simple commands like “systemctl enable bluetooth”, which is pretty self-explanatory. It covers every single possible base you could ever want an init system to cover, which is both its number one pro and absolute pitfall. Its years of maturity and resources make it generally dependable. With its full suite installed it covers  many bases that can make things easier for developers, since they don’t have to find or create external solutions.
 
-  
 
 
 However, this large suite can drive up RAM usage, storage usage and often lead to it doing jobs init systems were never intended to do, though this depends on how it’s configured. It comes with its own suite of configurations for things like networking and it has an extensive (subjectively resource intensive) integrated logging system. It also uses its own service management format called unit files in place of traditional shell scripts. (It can technically run shell scripts and not all other inits use shell scripts, but this is generally how things work). The project’s broad inclusion, potentially heavy resource usage compared to minimalist alternatives and the separation from “Do one thing and one thing well” Unix philosophy often fuel criticism. Many people like to aggressively push Unix philosophy onto core system components, and understandably so. 
