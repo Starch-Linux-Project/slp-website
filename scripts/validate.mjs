@@ -18,6 +18,9 @@ export function validateCms(root) {
   assert(category?.path === 'content/wiki-categories' && category.format === 'yaml', 'CMS category path/format must match the build.');
   assert(home?.path === 'content/wiki-home.md', 'CMS wiki home path must match the build.');
   const body = article.fields.find(field => field.name === 'body');
+  const date = article.fields.find(field => field.name === 'date');
+  assert(date?.type === 'date' && date.required === true && date.options?.format === 'yyyy-MM-dd', 'CMS articles require a publication date in YYYY-MM-DD format.');
+  assert(article.view?.default?.sort === 'date' && article.view.default.order === 'desc', 'CMS articles must default to newest first.');
   assert(body?.type === 'rich-text' && body.options?.format === 'markdown', 'CMS body must use Markdown rich-text.');
   const media = config.media.find(source => source.name === body.options.media);
   assert(media?.input === 'public/wiki/images' && media.output === '/wiki/images', 'CMS image paths must match the build.');

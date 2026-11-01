@@ -9,16 +9,18 @@ import { validateCms, validateOutput } from '../scripts/validate.mjs';
 
 function fixture(t) {
   const root = mkdtempSync(join(tmpdir(), 'starch-wiki-test-'));
-  cpSync('content', join(root, 'content'), { recursive: true });
+  mkdirSync(join(root, 'content/wiki'), { recursive: true });
+  mkdirSync(join(root, 'content/wiki-categories'), { recursive: true });
+  cpSync('content/wiki-home.md', join(root, 'content/wiki-home.md'));
   for (const [id, title, order] of [['getting-started', 'Getting started', 10], ['hardware', 'Hardware', 20]]) {
     writeFileSync(join(root, `content/wiki-categories/${id}.yml`), `title: ${title}\ndescription: Test category\norder: ${order}\n`);
   }
-  for (const [slug, title, category, order] of [
-    ['getting-started', 'Getting started', 'getting-started', 10],
-    ['installation', 'Installation', 'getting-started', 20],
-    ['handhelds', 'Handhelds', 'hardware', 10],
+  for (const [slug, title, category, date] of [
+    ['getting-started', 'Getting started', 'getting-started', '2026-10-03'],
+    ['installation', 'Installation', 'getting-started', '2026-10-01'],
+    ['handhelds', 'Handhelds', 'hardware', '2026-10-01'],
   ]) {
-    writeFileSync(join(root, `content/wiki/${slug}.md`), `---\ntitle: ${title}\ndescription: Test article\ncategory: content/wiki-categories/${category}.yml\norder: ${order}\n---\nTest content.\n`);
+    writeFileSync(join(root, `content/wiki/${slug}.md`), `---\ntitle: ${title}\ndescription: Test article\ncategory: content/wiki-categories/${category}.yml\ndate: ${date}\n---\nTest content.\n`);
   }
   t.after(() => rmSync(root, { recursive: true, force: true }));
   return root;
@@ -39,7 +41,7 @@ test('CMS configuration and complete generated site agree', () => {
 test('new articles enter navigation; title edits preserve URLs; deletion removes them', t => {
   const root = fixture(t);
   const path = join(root, 'content/wiki/a-new-page.md');
-  const source = '---\ntitle: A new page\ndescription: A new GUI article.\ncategory: content/wiki-categories/getting-started.yml\norder: 15\n---\nA new article.';
+  const source = '---\ntitle: A new page\ndescription: A new GUI article.\ncategory: content/wiki-categories/getting-started.yml\ndate: 2026-10-02\n---\nA new article.';
   writeFileSync(path, source);
   let wiki = loadWiki(root);
   let article = wiki.articles.find(a => a.slug === 'a-new-page');
@@ -62,6 +64,33 @@ test('category title changes preserve references; category removal reports a use
   assert.throws(() => loadWiki(root), /select an existing category/);
 });
 
+test('articles sort newest first in each category with stable title and filename ties', t => {
+  const root = fixture(t);
+  const source = readFileSync(join(root, 'content/wiki/installation.md'), 'utf8');
+  for (const slug of ['z-copy', 'a-copy']) {
+    writeFileSync(join(root, `content/wiki/${slug}.md`), source.replace('2026-10-01', '2026-10-03'));
+  }
+  const wiki = loadWiki(root);
+  const category = wiki.categories.find(c => c.id === 'getting-started');
+  assert.deepEqual(category.articles.map(a => a.slug), ['getting-started', 'a-copy', 'z-copy', 'installation']);
+  assert.equal(category.articles[0].previous, null);
+  assert.equal(category.articles[0].next.url, '/wiki/a-copy/');
+  assert.equal(category.articles.at(-1).next, null);
+  assert.equal(wiki.categories.find(c => c.id === 'hardware').articles[0].slug, 'handhelds');
+});
+
+test('publication dates must be present and use real calendar dates', t => {
+  const root = fixture(t);
+  const path = join(root, 'content/wiki/installation.md');
+  const source = readFileSync(path, 'utf8');
+  for (const value of ['', 'date: invalid', 'date: 2026-02-29', 'date: 2026-04-31', 'date: 2026-13-01', 'date: 2026-1-01', 'date: 2026-10-01T12:00:00Z']) {
+    writeFileSync(path, source.replace('date: 2026-10-01', value));
+    assert.throws(() => loadWiki(root), /installation\.md: date must be a valid calendar date/);
+  }
+  writeFileSync(path, source.replace('2026-10-01', '2024-02-29'));
+  assert.equal(loadWiki(root).articles.find(a => a.slug === 'installation').date, '2024-02-29');
+});
+
 test('CMS release filenames preserve version numbers in article URLs', t => {
   const root = fixture(t);
   const path = join(root, 'content/wiki/version-2.3-release.md');
@@ -77,14 +106,15 @@ test('CMS release filenames preserve version numbers in article URLs', t => {
   }
 });
 
-test('rejects reserved paths and invalid navigation order', t => {
+test('rejects reserved paths and invalid category order', t => {
   const root = fixture(t);
   const original = join(root, 'content/wiki/installation.md');
   const reserved = join(root, 'content/wiki/images.md');
   cpSync(original, reserved);
   assert.throws(() => loadWiki(root), /reserved article filename/);
   rmSync(reserved);
-  writeFileSync(original, readFileSync(original, 'utf8').replace('order: 20', 'order: wrong'));
+  const category = join(root, 'content/wiki-categories/getting-started.yml');
+  writeFileSync(category, readFileSync(category, 'utf8').replace('order: 10', 'order: wrong'));
   assert.throws(() => loadWiki(root), /order must be/);
 });
 
@@ -92,7 +122,7 @@ test('cover images require a repository upload and description', t => {
   const root = fixture(t);
   const path = join(root, 'content/wiki/handhelds.md');
   const source = readFileSync(path, 'utf8');
-  writeFileSync(path, source.replace('order: 10', 'order: 10\nimage: /wiki/images/test.png\nimage_alt: A device'));
+  writeFileSync(path, source.replace('date: 2026-10-01', 'date: 2026-10-01\nimage: /wiki/images/test.png\nimage_alt: A device'));
   assert.throws(() => loadWiki(root), /existing upload/);
   mkdirSync(join(root, 'public/wiki/images'), { recursive: true });
   writeFileSync(join(root, 'public/wiki/images/test.png'), 'fixture');
@@ -114,7 +144,7 @@ test('a CMS-style article and upload build into public files; a rebuild removes 
   const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aD1sAAAAASUVORK5CYII=', 'base64');
   writeFileSync(join(root, 'public/wiki/images/example.png'), png);
   const source = join(root, 'content/wiki/upload-test.md');
-  writeFileSync(source, '---\ntitle: Upload test\ndescription: Screenshot upload test\ncategory: content/wiki-categories/hardware.yml\norder: 20\n---\n## Screenshot\n\n![Example screenshot](/wiki/images/example.png)\n\n| Item | Status |\n| --- | --- |\n| Test | Ready |\n');
+  writeFileSync(source, '---\ntitle: Upload test\ndescription: Screenshot upload test\ncategory: content/wiki-categories/hardware.yml\ndate: 2026-10-02\n---\n## Screenshot\n\n![Example screenshot](/wiki/images/example.png)\n\n| Item | Status |\n| --- | --- |\n| Test | Ready |\n');
   const build = () => {
     const result = spawnSync(process.execPath, ['scripts/build.mjs'], { cwd: root, encoding: 'utf8' });
     assert.equal(result.status, 0, result.stdout + result.stderr);

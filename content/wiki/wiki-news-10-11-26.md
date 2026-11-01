@@ -4,7 +4,7 @@ description: |-
   First news post in the wiki! 
   (10/11/26)
 category: content/wiki-categories/news.yml
-order: 10
+date: 2026-10-11
 ---
 We officially have a wiki!
 

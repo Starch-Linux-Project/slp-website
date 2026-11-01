@@ -22,12 +22,12 @@ content:
       delete: true
     view:
       primary: title
-      fields: [title, category, order]
-      sort: [title, order]
+      fields: [title, category, date]
+      sort: [title, date]
       search: [title, description]
       default:
-        sort: order
-        order: asc
+        sort: date
+        order: desc
     fields:
       - name: title
         label: Page title
@@ -47,14 +47,13 @@ content:
           value: "{path}"
           label: "{title}"
           search: title
-      - name: order
-        label: Navigation order
-        description: Lower numbers appear first within the category. Use 10, 20, 30 to leave room for new articles.
-        type: number
+      - name: date
+        label: Publication date
+        description: The date this article was first published. Newest articles appear first within each category; keep this date when editing an existing article.
+        type: date
         required: true
-        default: 10
         options:
-          min: 0
+          format: yyyy-MM-dd
       - name: body
         label: Article
         type: rich-text

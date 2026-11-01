@@ -13,7 +13,7 @@ The wiki lives at https://starchlinuxproject.org/wiki/. The website serves stati
 
 The wiki starts with an editable homepage and no preset articles or categories. First create a category in **Wiki categories**, then add your first article. Empty categories remain hidden from public navigation until they contain an article.
 
-Open **Starch Linux Wiki** and create an entry or select an existing one. Enter its title, short description, category, and navigation order. Write using the **Article** rich-text editor. Lower order numbers appear first within a category; use 10, 20, 30 to leave room between entries. Equal order numbers sort by title.
+Open **Starch Linux Wiki** and create an entry or select an existing one. Enter its title, short description, category, and **Publication date**. The date field starts with the current local date. Write using the **Article** rich-text editor. Articles appear newest first within each category, including navigation and previous/next links. Articles with the same date sort by title, then filename. Keep the original publication date when editing an existing article so routine edits do not move it to the top.
 
 New filenames are based on the title. Use lowercase words separated by hyphens, such as `installation.md`. Do not use `index`, `images`, or `404`. The filename determines the public URL; changing a title later preserves that URL. File renaming is disabled in the supplied configuration to avoid breaking links.
 
@@ -38,12 +38,12 @@ If you maintain `.pages.yml` through the Pages CMS website, keep these paths and
 
 | Content | Repository path | Format and fields |
 | --- | --- | --- |
-| Articles | `content/wiki/*.md` | YAML frontmatter: `title`, `description`, `category`, `order`; Markdown `body`; optional `image`, `image_alt` |
+| Articles | `content/wiki/*.md` | YAML frontmatter: `title`, `description`, `category`, `date`; Markdown `body`; optional `image`, `image_alt` |
 | Homepage | `content/wiki-home.md` | YAML frontmatter: `title`, `description`; Markdown `body` |
 | Categories | `content/wiki-categories/*.yml` | YAML: `title`, `description`, `order` |
 | Uploads | `public/wiki/images/` | Public prefix `/wiki/images/` |
 
-`category` stores the full repository path of a category, for example `content/wiki-categories/hardware.yml`. Use a single Pages CMS `reference` field with `value: "{path}"` and a label based on the category title. `order` is a non-negative number. Required titles, descriptions, and bodies cannot be empty. The build validates these rules and reports errors by filename.
+`category` stores the full repository path of a category, for example `content/wiki-categories/hardware.yml`. Use a single Pages CMS `reference` field with `value: "{path}"` and a label based on the category title. Article `date` must be a real calendar date in `YYYY-MM-DD` format (for example, `2026-11-01`). Missing or invalid dates stop the build. Category `order` is a non-negative number. Required titles, descriptions, and bodies cannot be empty. The build validates these rules and reports errors by filename.
 
 ## Local development
 

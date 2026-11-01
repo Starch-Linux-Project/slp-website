@@ -3,7 +3,7 @@ title: Fortnite is coming to Linux!
 description: Here are some things you should know before playing Fortnite on
   Linux (10/14/26)
 category: content/wiki-categories/news-1.yml
-order: 10
+date: 2026-10-14
 image: /wiki/images/fortnite-og-season-2-feature-4040030182.jpg
 image_alt: Fortnite loading screen
 ---

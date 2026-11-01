@@ -3,7 +3,7 @@ title: Linux Update Utility Installation and Usage Guide
 description: Instructions for installing and using Linux Update
   Utility(10/24/26) *Edited(10/25/26)
 category: content/wiki-categories/installation-guides.yml
-order: 10
+date: 2026-10-24
 ---
 Hello;
 
