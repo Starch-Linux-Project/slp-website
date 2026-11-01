@@ -1,6 +1,6 @@
 ---
 title: Linux Update Utility 1.2.1 Release
-description: Release notes for Linux Update Utility 1.2.1 Release(10/25/26)
+description: Release notes for Linux Update Utility 1.2.1 Release
 category: content/wiki-categories/releases.yml
 date: 2026-10-25
 ---
@@ -14,7 +14,7 @@ Fix(es);
 
 Acknowledgement(s);
 
-- Fingerprint authentication still has not been fully implemented, the authentication window may fail to appear but still authenticate with your fingerprint. Otherwise, simply use your PIN. Sorry for the inconvenience. 
+- Fingerprint authentication still has not been fully implemented, the authentication window may fail to appear but still authenticate with your fingerprint. Otherwise, simply use your PIN. Sorry for the inconvenience.
 
 Thank You,
 
