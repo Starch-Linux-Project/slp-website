@@ -271,8 +271,8 @@ p { margin-bottom:22px; }
 .discord-bottom h2 { font-size:clamp(34px, 4vw, 44px); line-height:1.04; font-weight:600; letter-spacing:-1.3px; margin-bottom:13px; text-shadow:0 0 24px rgb(98 168 255 / 28%), 0 0 60px rgb(98 168 255 / 24%), 0 0 100px rgb(98 168 255 / 16%); }
 .discord-bottom h2 span { color:var(--accent); }
 .discord-bottom p { color:var(--muted); font-size:14px; margin-bottom:0; }
-.discord-pending { display:inline-flex; align-items:center; gap:18px; border:1px solid var(--accent); padding:12px 18px; border-radius:4px; color:var(--ink) !important; background:var(--surface); flex-shrink:0; text-decoration:none; }
-.discord-pending:hover { background:var(--accent); color:var(--paper) !important; }
+.discord-pending, .github-button { display:inline-flex; align-items:center; gap:18px; border:1px solid var(--accent); padding:12px 18px; border-radius:4px; color:var(--ink) !important; background:var(--surface); flex-shrink:0; text-decoration:none; }
+.discord-pending:hover, .github-button:hover { background:var(--accent); color:var(--paper) !important; }
 .link-service { display:inline-flex; align-items:center; gap:10px; }
 .service-logo { display:block; width:auto; height:12px; max-height:12px; flex-shrink:0; object-fit:contain; }
 .home-discord { margin-top:-12px; margin-bottom:16px; padding:30px 0; }
