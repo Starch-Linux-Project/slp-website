@@ -12,10 +12,11 @@ permalink: /wiki/index.html
   <section class="wiki-category" id="category-{{ category.id }}" aria-labelledby="category-title-{{ category.id }}">
     <h2 id="category-title-{{ category.id }}">{{ category.title | escape }}</h2>
     <p>{{ category.description | escape }}</p>
-    <ul>{% for entry in category.articles %}
+    <ul{% if category.articles.length > 2 %} tabindex="0" aria-labelledby="category-title-{{ category.id }}"{% endif %}>{% for entry in category.articles %}
       <li><a href="{{ entry.url }}">{{ entry.title | escape }} <span aria-hidden="true">→</span></a><p>{{ entry.description | escape }}</p><p class="wiki-date">Published <time datetime="{{ entry.date | escape }}">{{ entry.date | publicationDate }}</time></p></li>
     {% endfor %}</ul>
   </section>
 {% endif %}
 {% endfor %}
 </div>
+<script src="/js/wiki.js" defer></script>
