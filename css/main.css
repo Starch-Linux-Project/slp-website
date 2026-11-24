@@ -154,6 +154,23 @@ p { margin-bottom:22px; }
 .download-option-action { margin-top:auto; padding-top:6px; }
 .download-option-action .fine-print { margin:0 0 10px; }
 .download-option .button { width:100%; }
+.checksum-option { min-width:0; }
+.checksum-option .download-option-action { container-type:inline-size; }
+.checksum-value {
+  display:block;
+  padding:12px;
+  margin-bottom:10px;
+  border:1px solid var(--line);
+  border-radius:4px;
+  background:var(--surface);
+  font:0.625rem/1.5 ui-monospace, monospace;
+  font-size:min(0.75rem, calc((100cqi - 26px) / 42));
+  white-space:nowrap;
+  overflow-x:auto;
+  user-select:all;
+}
+.download-option-action .checksum-feedback { margin:0; }
+.download-option-action .checksum-feedback:not(:empty) { margin-top:10px; }
 .button:disabled, .button:disabled:hover { background:var(--surface); color:var(--muted); border-color:var(--control-border); cursor:not-allowed; }
 .download-verification { color:var(--muted); font-size:13px; margin:22px 0 0; }
 @media (max-width:700px) {
