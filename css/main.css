@@ -197,12 +197,13 @@ p { margin-bottom:22px; }
 }
 
 /* Local screenshots retain their full composition and link to the originals. */
-.project-gallery { min-width:0; }
+.project-gallery { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); width:100%; max-width:340px; justify-self:center; gap:16px; min-width:0; align-items:start; }
 .project-screenshot { margin:0; min-width:0; }
+.project-gallery > .project-screenshot { width:100%; max-width:160px; }
 .project-screenshot > a { display:block; border:1px solid var(--line); border-radius:8px; overflow:hidden; }
 .project-screenshot > a:hover { border-color:var(--accent); }
 .project-screenshot img { display:block; width:100%; height:auto; }
-.project-screenshot figcaption { color:var(--muted); font-size:12px; margin-top:10px; }
+.project-screenshot figcaption { color:var(--muted); font-size:14px; margin-top:8px; }
 .extra-screenshot { margin-top:18px; }
 .extra-screenshot summary { color:var(--muted); cursor:pointer; font-size:13px; padding:6px 0; }
 .extra-screenshot summary:hover { color:var(--accent); }
