@@ -1,6 +1,6 @@
 ---
 title: Starch Linux 1.3 Release
-description: Release notes and information for Starch Linux 1.2
+description: Release notes and information for Starch Linux 1.3
 category: content/wiki-categories/releases.yml
 date: 2026-11-24
 ---
@@ -104,3 +104,4 @@ SethDoesTech
 
 
 
+&nbsp;
